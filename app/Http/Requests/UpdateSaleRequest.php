@@ -25,8 +25,9 @@ class UpdateSaleRequest extends FormRequest
         return [
             // "sale_id" => ["required","numeric",Rule::exists("sales","id")],
             "products" => ["array","required"],
-            "products.SaleTransaction_id" => ["required","numeric",Rule::exists("sale_transactions","id")],
-            "products.quantity" => ["required","numeric"],
+            "products.*" => ["array","required"],
+            "products.*.SaleTransaction_id" => ["required","numeric",Rule::exists("sale_transactions","id")],
+            "products.*.quantity" => ["required","numeric"],
         ];
     }
 }

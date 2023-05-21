@@ -44,9 +44,10 @@ class ClientController extends Controller
      */
     public function update(ClientReuest $request, User $client)
     {
+        
         $data = Arr::except($request->validated(),["email","role"]);
         $data["password"] = Hash::make($data["password"]);
-        $client->update();
+        $client->update($data);
         return response()->json($client);
     }
 

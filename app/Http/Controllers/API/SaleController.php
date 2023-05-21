@@ -92,11 +92,12 @@ class SaleController extends Controller
     {
         try{
             DB::beginTransaction();
-            $products = $request->sales;
+            $products = $request->products;
             $sale = Sale::query()->findOrFail($sale->id);
             $FinalPrice = 0;
             foreach($products as $product){
-                $temp = SaleTransaction::query()->find($product["SaleTransaction_id"]);
+                $temp1 = SaleTransaction::query()->find($product["SaleTransaction_id"]);
+                $temp = Product::query()->find($temp1->product_id);
                 $tempPrice = $temp->price * $product["quantity"];
                 $FinalPrice += $tempPrice;
                 $temp->update([
@@ -123,6 +124,8 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         $sale->delete();
+        Log::channel('update_sales')->info(' sale operation Deleted', ['sale_transaction_id' => $sale->id]);
+        DB::commit();
         return response()->json(null, 204);
     }
 }
